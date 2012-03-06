@@ -1,0 +1,12 @@
+.DS_Store
+*.swp
+.bundle
+bin
+.livereload
+.jhw-cache
+coverage
+log/*
+tmp/
+.idea
+generator.iml
+*.pid
