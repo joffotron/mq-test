@@ -1,4 +1,5 @@
-require "amqp/utilities/event_loop_helper"
+require 'amqp/utilities/event_loop_helper'
+require 'bunny'
 
 class TestRunController < ApplicationController
 
@@ -9,7 +10,7 @@ class TestRunController < ApplicationController
   def run
     AMQP::Utilities::EventLoopHelper.run do
 
-      connection = AMQP.start(AMQP_OPTS)
+      connection = AMQP.connect(AMQP_OPTS)
 
       channel               = AMQP::Channel.new(connection)
       channel.auto_recovery = true
@@ -21,7 +22,7 @@ class TestRunController < ApplicationController
       #  logger.error "Exchange #{ex.name} detected connection interruption"
       #end
 
-      exchange.publish("Hello, world!", :routing_key => "rails.helloworld", :persistent => true) do
+      exchange.publish("Hello, world!", :routing_key => "rails.helloworld", :mandatory => true, :persistent => true) do
         logger.info "foo"
       end
 
@@ -32,7 +33,10 @@ class TestRunController < ApplicationController
 
   def bunny
     #push messages to queue
+    Bunny.run(AMQP_CONFIG) do |b|
+      b.queue("queue.#{queue}", :durable => true).publish(message.to_json, :mandatory => true, :persistent => true)
 
+    end
   end
 
   def read
@@ -40,7 +44,7 @@ class TestRunController < ApplicationController
 
     AMQP.start(AMQP_OPTS) do |connection|
       channel = AMQP::Channel.new(connection)
-      queue   = channel.queue("rails.helloworld", :durable => true, :persistent => true)
+      queue   = channel.queue("rails.helloworld", :durable => true)
 
       logger.info "Got queue for read"
 
@@ -67,6 +71,5 @@ class TestRunController < ApplicationController
     logger.info "Done, rendering messages"
     render :text => messages.join('<br/>')
   end
-
 
 end
