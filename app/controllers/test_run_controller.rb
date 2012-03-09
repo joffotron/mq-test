@@ -15,7 +15,7 @@ class TestRunController < ApplicationController
       channel               = AMQP::Channel.new(connection)
       channel.auto_recovery = true
 
-      channel.queue("rails.helloworld", :durable => true, :persistent => true)
+      channel.queue("rails.helloworld", :durable => true)
       exchange = channel.default_exchange
 
       #exchange.on_connection_interruption do |ex|
