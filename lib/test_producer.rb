@@ -20,7 +20,7 @@ class TestProducer
 
 end
 
-def next_server                                         ``
+def next_server
   (@current_server == AMQP_NODE_1) ? AMQP_NODE_2 : AMQP_NODE_1
 end
 

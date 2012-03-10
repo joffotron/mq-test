@@ -20,6 +20,7 @@ class TestConsumer
     @queue.subscribe(:ack => true) do |header, payload|
       handle_message(header, payload)
       header.ack
+      puts "Message ack'd"
     end
   end
 
