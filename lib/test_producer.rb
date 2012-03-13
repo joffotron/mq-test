@@ -42,10 +42,10 @@ EventMachine.run do
   channel               = AMQP::Channel.new(connection)
   channel.auto_recovery = true
 
-  channel.queue("rails.helloworld", :durable => true,:'x-ha-policy' => 'all')
+  channel.queue("rails.helloworld", :durable => true, :arguments => {'x-ha-policy''' => 'all'})
   test_producer = TestProducer.new(channel.default_exchange)
 
-  EventMachine.add_periodic_timer(2.0) do
+  EventMachine.add_periodic_timer(0.5) do
     test_producer.say_hello
   end
 

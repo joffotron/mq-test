@@ -16,7 +16,7 @@ class TestConsumer
   end
 
   def start
-    @queue = @channel.queue(@queue_name, :durable => true, :'x-ha-policy' => 'all')
+    @queue = @channel.queue(@queue_name, :durable => true, :arguments => {'x-ha-policy''' => 'all'})
     @queue.subscribe(:ack => true) do |header, payload|
       handle_message(header, payload)
       header.ack
@@ -26,6 +26,7 @@ class TestConsumer
 
   def handle_message(header, payload)
     puts "Received a message: #{payload}, content_type = #{header.content_type}"
+    sleep 0.5
     puts "Processed message #{payload}"
   end
 
