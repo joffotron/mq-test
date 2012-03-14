@@ -45,7 +45,7 @@ EventMachine.run do
   channel.queue("rails.helloworld", :durable => true, :arguments => {'x-ha-policy''' => 'all'})
   test_producer = TestProducer.new(channel.default_exchange)
 
-  EventMachine.add_periodic_timer(0.5) do
+  EventMachine.add_periodic_timer(0.1) do
     test_producer.say_hello
   end
 
