@@ -1,2 +1,0 @@
-Simple test Rails 3.2 app that demonstrates publishing to AMQP 0.9.1 queues with amqp and bunny gems, and reading using AMQP
-
